@@ -3,7 +3,7 @@ description: Mandatory course agent policy from AGENTS.md
 alwaysApply: true
 ---
 
-<!-- Canonical source: /AGENTS.md. Keep this file identical to AGENTS.md aside from this notice and the frontmatter. Trae Code does not load AGENTS.md unless the user enables Include AGENTS.md in context, so this always-on rule injects the same policy. -->
+<!-- Canonical source: /AGENTS.md. Keep this file identical to AGENTS.md aside from this notice and the frontmatter. Tongyi Lingma / Qoder CN does not parse links in rules, so this always-on rule injects the same policy. -->
 
 # AI Agent Guidelines for CS336 at Stanford
 
