@@ -16,4 +16,4 @@
 
 ## Coding agent 规则
 
-本仓库对 Cursor、Claude Code、GitHub Copilot、Gemini CLI、Aider、Windsurf、Cline 等 coding agent 的强制规则写在 [`AGENTS.md`](AGENTS.md)。根目录和工具目录下的适配文件（例如 `CLAUDE.md`、`.cursor/rules/`、`.github/copilot-instructions.md`）只负责让各工具自动加载这份政策，**不要在适配文件里改政策本身**。若更新规则，请改 `AGENTS.md`，并同步 `.github/copilot-instructions.md`。
+本仓库对 Cursor、Claude Code、GitHub Copilot、Gemini CLI、Aider、Windsurf、Cline、Trae Code 等 coding agent 的强制规则写在 [`AGENTS.md`](AGENTS.md)。根目录和工具目录下的适配文件（例如 `CLAUDE.md`、`.cursor/rules/`、`.github/copilot-instructions.md`、`.trae/rules/`）只负责让各工具自动加载这份政策，**不要在适配文件里改政策本身**。若更新规则，请改 `AGENTS.md`，并同步 `.github/copilot-instructions.md` 与 `.trae/rules/follow-agents.md`。
