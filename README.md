@@ -20,4 +20,4 @@
 
 已适配：Cursor、Claude Code、GitHub Copilot、Gemini CLI、Aider、Windsurf、Cline、Trae Code、腾讯云 CodeBuddy、通义灵码 / Qoder CN、Qoder、百度文心快码 Comate、心流 iFlow。华为云码道 CodeArts 与 Qwen Code 会直接读取根目录 `AGENTS.md`，无需额外文件。
 
-若更新规则，请改 `AGENTS.md`，并同步全文镜像：`.github/copilot-instructions.md`、`.trae/rules/follow-agents.md`、`CODEBUDDY.md`、`.lingma/rules/follow-agents.md`、`.comate/rules/follow-agents.mdr`。
+若更新规则，请改 `AGENTS.md`，并同步全文镜像：`.github/copilot-instructions.md`、`.trae/rules/follow-agents.md`、`CODEBUDDY.md`、`.lingma/rules/follow-agents.md`、`.comate/rules/follow-agents.mdr`。可用 `python3 scripts/check_agents_mirrors.py` 检查一致性，或加 `--write` 按 `AGENTS.md` 刷新镜像；CI 会在每次推送和 PR 上跑同一检查。
