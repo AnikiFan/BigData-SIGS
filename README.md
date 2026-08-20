@@ -1,6 +1,6 @@
 # 大数据系统基础 B
 
-本模板仓库用于规范地借助 coding agent 完成本课程实验。`AGENTS.md` 记录了 coding agent 在辅助实验时应遵守的行为约束；使用 agent 时，请明确要求其遵循该文件。
+本模板仓库用于规范学生在`AGENTS.md`约束下使用 coding agent 辅助完成本课程实验。根据`AGENTS.md` ，coding agent 只负责引导学生，学生仍需自行完成核心实现、运行实验并验证结果。学生请在使用 coding agent 时明确要求其遵循该文件。
 
 `Lab1_Linux`、`Lab2_DFS_MapReduce`、`Lab3_Spark`、`Lab4_Spark_Streaming` 四个目录分别存放 Lab 1–4 的参考资料，供 agent 与同学查阅。
 
