@@ -537,15 +537,15 @@ wait
 运行这两个脚本，对比它们运行的时间
 
 ```shell
-2019211199@thumm01:~$ vim shell_block.sh
-2019211199@thumm01:~$ vim shell_unblock.sh
-2019211199@thumm01:~$ time bash ./shell_block.sh
+2019211199@thumm01:~$ vim shell_blocked.sh
+2019211199@thumm01:~$ vim shell_unblocked.sh
+2019211199@thumm01:~$ time bash ./shell_blocked.sh
 
 real    0m8.6xxs
 user    0m8.5xxs
 sys     0m0.0xxs
 
-2019211199@thumm01:~$ time bash ./shell_unblock.sh
+2019211199@thumm01:~$ time bash ./shell_unblocked.sh
 
 real    0m2.3xxs
 user    0m8.7xxs
@@ -699,7 +699,7 @@ For each node:
 
 ### B.2 多节点词频统计：切分→分发→执行→回收→汇总  （1.5 分）
 
-请仿照 `wc_dataset.txt`，制作 10M~20M 左右的数据集（比如将 `wc_dataset.txt` 重复拼接十几次，不要太多会把硬盘占满）。在多主机运行一个简单的词频统计任务并汇总（即每个字母出现多少次，区分大小写），对比单机处理和多机处理的差异，可以包括任务执行结果、延迟等方面。
+请仿照 `wc_dataset.txt`，制作 10M~20M 左右的数据集（比如将 `wc_dataset.txt` 重复拼接十几次，不要太多会把硬盘占满）。在多主机运行一个简单的词频统计任务并汇总（即每个单词出现多少次，区分大小写），对比单机处理和多机处理的差异，可以包括任务执行结果、延迟等方面。
 
 > **重要提醒**：每年都有大量同学把"多节点"做成了"在 thumm01 上跑完全部数据再 scp 几个文件到别的机器"。这并不是真正的多节点处理。请严格按照下面的拆解步骤来做。
 
