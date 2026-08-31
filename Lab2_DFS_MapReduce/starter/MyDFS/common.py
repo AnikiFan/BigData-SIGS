@@ -14,8 +14,7 @@ HEARTBEAT_TIMEOUT = 6   # 超过该时间未收到心跳则判定DataNode失联
 
 # 集群中的主机列表
 HOST_LIST = ['localhost']
-# 集群一4节点示例：HOST_LIST = ['thumm01', 'thumm03', 'thumm04', 'thumm07']
-# 集群二4节点示例：HOST_LIST = ['thumm01', 'thumm02', 'thumm03', 'thumm04']
+# 4节点示例（集群一、集群二均为01-04）：HOST_LIST = ['thumm01', 'thumm02', 'thumm03', 'thumm04']
 # 多机实验中建议设置：DFS_REPLICATION = 3
 NAME_NODE_HOST = 'localhost'
 
