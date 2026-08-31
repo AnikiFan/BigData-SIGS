@@ -1,11 +1,11 @@
-# 实验二 分布式文件系统
+# 实验二 DFS 与 MapReduce
 <div style="text-align: center;">
     <img src="./assets/bigger4.png" alt="1" style="zoom:50%;" />
 </div>
 
 ## 〇、服务器集群说明
 
-### 1.可使用的服务器集群
+### 1. 可使用的服务器集群
 
 集群一：ip地址： 10.103.9.11 ，可用机器：01，02，03，04。登录集群一01的命令： ssh
 xxx@10.103.9.11 （也就是和以下实验指导书的内容完全相同）
@@ -13,9 +13,9 @@ xxx@10.103.9.11 （也就是和以下实验指导书的内容完全相同）
 xxx@10.103.10.156 -p 8001 (由于进入该集群的端口并非默认端口，所以在 ssh 指令后面一定要用 -p 要加上端口号！)
 其中 xxx为学号，默认密码也为学号。
 
-### 2.注意事项
+### 2. 注意事项
 
-#### 2.2 集群二的ssh连接端口和内部节点ip改变的问题
+#### 2.1 集群二的ssh连接端口和内部节点ip改变的问题
 前面我们提到，集群二ssh所使用的端口为8001，而并非默认端口22，所以在使用 ssh 进入集群二时需要在最后添加 -p 8001 。此外，集群二节点之间的内部ip地址与集群一节点之间的内部ip地址也不同。
 
 在集群一当中， thumm0X 的内部ip为 ```192.168.0.10X``` （X为1到4）
@@ -24,12 +24,12 @@ xxx@10.103.10.156 -p 8001 (由于进入该集群的端口并非默认端口，�
 所以后续实验指导书中，涉及到集群的ssh连接端口以及集群节点内部ip的内容，在使用集群二的时候都需要进行对应修改（因为实验指导书默认使用的均为集群一）。
 举例：在本次实验指导书中的 “三、掌握Hadoop DFS常用指令”-“2. 通过Web 查看Hadoop 运行情况”，提到需要在本地运行命令 ssh xxx@10.103.9.11 -L 9870:192.168.0.101:9870 （其中xxx为学号），那么放在集群二当中，则需要运行 ssh xxx@10.103.10.156 -p 8001 -L 9870:192.168.1.101:9870 才能看到对应的结果。后续再有类似情况均进行类似处理。
 
-#### 2.3 集群节点更新通知
-此后我们将随时在课程群中通知类似于某个集群/某个集群节点需要停用/启用的通知，请同学们即时在课程群查收消息，并在必要时更换集群继续进行实验。当实验中出现任何故障（例如无法登录、无法进行文件读写），请及时在课程群内告知我们。我们会尽快进行问题的排查与集群节点的修复。
+#### 2.2 集群节点更新通知
+此后我们将随时在课程群中通知类似于某个集群/某个集群节点需要停用/启用的通知，请同学们及时在课程群查收消息，并在必要时更换集群继续进行实验。当实验中出现任何故障（例如无法登录、无法进行文件读写），请及时在课程群内告知我们。我们会尽快进行问题的排查与集群节点的修复。
 
 ## 一、实验目标
 
-本次实验旨补全一个简单的Distributed File System (DFS) 并在其上实现MapReduce框架。具体任务如下：
+本次实验旨在补全一个简单的Distributed File System (DFS) 并在其上实现MapReduce框架。具体任务如下：
 
 * 了解 Hadoop 分布式文件系统常用指令（1 分）；
 * 补全一个简单的分布式文件系统，并实现多副本与 HeartBeat 容错功能（9 分）；
@@ -111,7 +111,7 @@ drwxr-xr-x   - root  supergroup          0 2021-10-05 12:42 /dsjxtjc
 drwxrwxrwx   - jtliu supergroup          0 2020-12-21 23:25 /tmp
 ```
 
-可以看到，现在DFS 根目录下一共有两项。其中`dsjxtjc` 是一个文件夹，在这个文件夹下面有每位同学的文件夹，例如某位同学的学号是`202121xxxx`，那么TA对应的文件夹为`/dsjxtjc/202121xxxx/`。为了保证实验过程中不同用户之间不会产生干扰，每位同学只能在自己的文件夹下进行操作。下面查看自己的文件下的内容：
+可以看到，现在DFS 根目录下一共有两项。其中`dsjxtjc` 是一个文件夹，在这个文件夹下面有每位同学的文件夹，例如某位同学的学号是`202121xxxx`，那么TA对应的文件夹为`/dsjxtjc/202121xxxx/`。为了保证实验过程中不同用户之间不会产生干扰，每位同学只能在自己的文件夹下进行操作。下面查看自己文件夹下的内容：
 
 ```bash
 2020214210@thumm01:~$ hadoop fs -ls /dsjxtjc/2020214210
@@ -138,7 +138,7 @@ Hello Hadoop
 Hello Hadoop
 ```
 
-可以看到文件以及传输到DFS 上。`copyFromLocal/copyToLocal `用于本地文件系统与DFS之间文件的复制，`moveFromLocal/moveToLocal` 用于本地文件系统与DFS 之间文件的移动，这些指令的详细用法可以使用`-help` 指令查看，例如我们想了解`copyFromLocal `的用法：
+可以看到文件已经传输到DFS 上。`copyFromLocal/copyToLocal `用于本地文件系统与DFS之间文件的复制，`moveFromLocal/moveToLocal` 用于本地文件系统与DFS 之间文件的移动，这些指令的详细用法可以使用`-help` 指令查看，例如我们想了解`copyFromLocal `的用法：
 
 ```bash
 2020214210@thumm01:~$ hadoop fs -help copyFromLocal
@@ -164,23 +164,10 @@ Hello Hadoop
 在**<u>本地</u>**运行如下命令（将服务器的9870 端口映射到本地的9870 端口）：
 
 ```bash
-(base) ➜  ~ ssh szxie@10.103.9.11 -L 9870:192.168.0.101:9870
+ssh xxx@10.103.9.11 -L 9870:192.168.0.101:9870
 Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.4.0-210-generic x86_64)
-
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/advantage
-
-70 个可升级软件包。
-2 个安全更新。
-
-New release '18.04.6 LTS' available.
-Run 'do-release-upgrade' to upgrade to it.
-
-
-*** 需要重启系统 ***
-Last login: Mon Oct 11 19:28:35 2021 from 10.61.237.158
-szxie@thumm01:~$ 
+...
+xxx@thumm01:~$ 
 ```
 
 在本地的浏览器中输入`localhost:9870` 打开9870 端口，即可查看hadoop 运行情况，可通过此界面查看hadoop 的一些基本参数和job/task 的完成情况。
@@ -213,16 +200,17 @@ GFS由一个`master`、多个`chunkserver`组成；用户通过`client`与GFS交
 
 #### 0.0 目录结构
 
+starter 中的 `MyDFS` 目录如下（`dfs/name`、`dfs/data` 在首次运行 NameNode/DataNode 或执行 `format` 时创建）：
+
 - MyDFS : 根目录
-  - dfs : DFS文件夹，用于模拟DFS文件系统
-    - name : 存放NameNode数据
-    - data : 存放DataNode数据
-  - test : 存放测试样例
-    - test.txt
-  - common.py  : 全局变量
+  - test.txt : 测试样例
+  - common.py : 全局变量
   - name_node.py : NameNode程序
   - data_node.py : DataNode程序
   - client.py : Client程序，用于用户与DFS交互
+  - dfs : 运行时生成，用于模拟DFS文件系统
+    - name : 存放NameNode数据
+    - data : 存放DataNode数据
 
 #### 0.1 模块功能
 
@@ -255,10 +243,10 @@ GFS由一个`master`、多个`chunkserver`组成；用户通过`client`与GFS交
 
 #### 0.2 操作示例
 
-0. 进入MyDFS目录，**根据注意点1修改端口号**并执行如下命令
+0. 进入MyDFS目录，**根据下方注意点修改端口号**并执行如下命令
 
       ```sh
-      $ cd MyDFS/test
+      $ cd MyDFS
       $ cp test.txt test_copyFromLocal.txt
       ```
 
@@ -277,7 +265,7 @@ GFS由一个`master`、多个`chunkserver`组成；用户通过`client`与GFS交
 3. 新建终端3，使用copyFromLocal指令（下面会解释该指令作用）
 
    ```sh
-   $ python3 client.py -copyFromLocal ./test/test_copyFromLocal.txt test_copyFromLocal.txt
+   $ python3 client.py -copyFromLocal ./test_copyFromLocal.txt test_copyFromLocal.txt
    File size: 8411
    Request: new_fat_item test_copyFromLocal.txt 8411
    Fat:
@@ -287,7 +275,7 @@ GFS由一个`master`、多个`chunkserver`组成；用户通过`client`与GFS交
    2,localhost,219
    ```
 
-   其中blk_no为块号， host_name为该数据块存放的主机，blk_size为块的大小。这条指令作用是将./test/test_copyFromLocal.txt发送到dfs文件系统，文件系统将该文件切成三块，大小分别为4096, 4096, 219，并且都存储在localhost（thumm01）的dfs上。所以在./dfs/name和./dfs/data中会出现新文件。
+   其中blk_no为块号， host_name为该数据块存放的主机，blk_size为块的大小。这条指令作用是将./test_copyFromLocal.txt发送到dfs文件系统，文件系统将该文件切成三块，大小分别为4096, 4096, 219，并且都存储在localhost（thumm01）的dfs上。所以在./dfs/name和./dfs/data中会出现新文件。
 
 ### 1. copyFromLocal （例）
 
@@ -340,10 +328,10 @@ def copyToLocal(self, dfs_path, local_path):
     # TODO: 从NameNode获取一张FAT表；打印FAT表；根据FAT表逐个从目标DataNode请求数据块，写入到本地文件中
 ```
 
-执行如下命令，代表将dfs上的test_copyFromLocal.txt文件下载到本地`./test/test_copyToLocal.txt`
+执行如下命令，代表将dfs上的test_copyFromLocal.txt文件下载到本地`./test_copyToLocal.txt`
 
 ```sh
-$ python3 client.py -copyToLocal test_copyFromLocal.txt ./test/test_copyToLocal.txt
+$ python3 client.py -copyToLocal test_copyFromLocal.txt ./test_copyToLocal.txt
 Request: get_fat_item test_copyFromLocal.txt
 Fat:
 blk_no,host_name,blk_size
@@ -354,7 +342,7 @@ blk_no,host_name,blk_size
 
 ### 3. ls（1 分）
 
-Client 会向NameNode 发送请求，查看`dfs_path`下的文件或文件夹信息，请完善`client.py`中的`ls`函数（如下），使其实现上述功能，并能打印错误（使用`try...error`语句）。
+Client 会向NameNode 发送请求，查看`dfs_path`下的文件或文件夹信息，请完善`client.py`中的`ls`函数（如下），使其实现上述功能，并能打印错误（使用`try...except`语句）。
 
 ```python
 def ls(self, dfs_path):
@@ -378,7 +366,7 @@ b'blk_no,host_name,blk_size\n0,localhost,4096\n1,localhost,4096\n2,localhost,219
 def rm(self, dfs_path):
     request = "rm_fat_item {}".format(dfs_path)
     print("Request: {}".format(request))
-    # 从NameNode获取改文件的FAT表，获取后删除；打印FAT表；根据FAT表逐个告诉目标DataNode删除对应数据块
+    # 从NameNode获取该文件的FAT表，获取后删除；打印FAT表；根据FAT表逐个告诉目标DataNode删除对应数据块
 ```
 
 执行结果如下，在./dfs/name和./dfs/data中的文件被删除
@@ -410,14 +398,14 @@ b'Remove chunk ./dfs/data/test_copyFromLocal.txt.blk2 successfully~'
 
 ### 6. data replication（2 分）
 
-目前common.py中DFS_REPLICATION为1，意为每个数据块只存储在一台主机上。实际上从系统稳定性考虑，每个数据块会被存放在多台主机。请修改DFS_REPLICATION和HOST_LIST，以及namenode.py、datanode.py、client.py中对应的部分，实现多副本块存储。本实验默认使用4个CPU节点，推荐将`DFS_REPLICATION`设为3，并在4台机器上测试。
+目前common.py中DFS_REPLICATION为1，意为每个数据块只存储在一台主机上。实际上从系统稳定性考虑，每个数据块会被存放在多台主机。请修改DFS_REPLICATION和HOST_LIST，以及`name_node.py`、`data_node.py`、`client.py`中对应的部分，实现多副本块存储。本实验默认使用4个CPU节点，推荐将`DFS_REPLICATION`设为3，并在4台机器上测试。
 
 多副本实现要求：同一个`blk_no`应当出现在FAT表的多行中，且对应3个不同DataNode；`copyToLocal`可以从任意一个可用副本读取；`rm`需要删除该块的全部副本。
 
 执行结果如下（注意要先将MyDFS拷贝到每个主机，都要启动datanode），报告中需要截图表示每个节点都能找到对应数据块
 
 ```sh
-$ python3 client.py -copyFromLocal ./test/test_copyFromLocal.txt test_copyFromLocal.txt
+$ python3 client.py -copyFromLocal ./test_copyFromLocal.txt test_copyFromLocal.txt
 File size: 8411
 Request: new_fat_item test_copyFromLocal.txt 8411
 Fat: 
@@ -503,26 +491,25 @@ MapReduce处理流程如下
 
 ### ⭐️要求
 
-请参考下面给出的数据集格式，进行数据的生成以及运行结果正确性的验证，并在实验报告中给出生成数据的代码以及单机运行验证运行结果正确性的代码。为方便验证和调试，数据量不易过大但至少占用2个datanode。矩阵存储推荐流程示意图中三元组方式，即（行，列，值） ；
+请参考下面给出的数据集格式，进行数据的生成以及运行结果正确性的验证，并在实验报告中给出生成数据的代码以及单机运行验证运行结果正确性的代码。为方便验证和调试，数据量不宜过大但至少占用2个datanode。矩阵存储推荐流程示意图中三元组方式，即（行，列，值）。
 
-我们假定要计算的矩阵为$C=AB$，其中$A$为$m$行$p$列，$B$为$p$行$n$列。考虑到mapreduce任务处理的数据量非常大，为了避免为服务器造成较大的负担，大家自行生成数据时按照$m,n,p\le 200$ ， $A,B$中的非零元素不超过对应矩阵所有元素的千分之六 ( 6‰ ) 去考虑即可。
+我们假定要计算的矩阵为$C=AB$，其中$A$为$m$行$p$列，$B$为$p$行$n$列。考虑到mapreduce任务处理的数据量非常大，为避免对服务器造成较大的负担，大家自行生成数据时按照$m,n,p\le 200$ ， $A,B$中的非零元素不超过对应矩阵所有元素的千分之六 ( 6‰ ) 去考虑即可。
 #### 输入
 输入文件给定若干行，每一行的格式为 $<Matrix>,<Row>,<Col>,<Number>$，其中$<Matrix>$为一个字母，只会是A或者B，代表该元素来自矩阵$A$或者矩阵$B$ 。
 $<Row>$代表该元素对应的行， $<Col>$代表该元素对应的列，$<Number>$为一个非零元素（为了简化实验要求和验证过程，只要是正整数即可）
 对于矩阵$A$ 保证有$1\le Row \le m, 1\le Col \le p$
 对于矩阵$B$ 保证有$1\le Row \le p, 1\le Col \le n$
-为了考虑实验难度，我们不需要在输入文件中给出m、p、n的值，将其放在你运行时输入的命令行指令即可。（但是如果有同学想进行尝试，那么将额外放在输入文件的第一行也是可以的）
+为降低实验难度，我们不需要在输入文件中给出m、p、n的值，将其放在你运行时输入的命令行指令即可。（但是如果有同学想进行尝试，那么将额外放在输入文件的第一行也是可以的）
 
 #### 输出
 
-按照$\{Row,Col\}$ 的双关键字从小到大排序（即整体先对Row从小到大排序，在Row相同的情况下对Col进行从小到大排序），对矩阵C的 *全部非零元素* 进行输出。输出格式为 <Row>,<Col>,<Number>需要注意的是，输入的时候可以不保证按照双关键字从小到大排序，也不需要保证A和B的非零元素
-不穿插出现。但是一定要输入文件和输出文件均不出现重复位置的元素。 （例如：在输入文件同时出现两行 ```A,3,4,5 , A,3,4,15``` 这样的情况，可能是生成了重复位置的元素）
+按照$\{Row,Col\}$ 的双关键字从小到大排序（即整体先对Row从小到大排序，在Row相同的情况下对Col进行从小到大排序），对矩阵C的 *全部非零元素* 进行输出。输出格式为 `<Row>,<Col>,<Number>`。需要注意的是，输入的时候可以不保证按照双关键字从小到大排序，也不需要保证A和B的非零元素不穿插出现。但是一定要输入文件和输出文件均不出现重复位置的元素。（例如：在输入文件同时出现两行 `A,3,4,5` 与 `A,3,4,15` 这样的情况，可能是生成了重复位置的元素）
 
 #### 命令行样例
 
-假如我们需要运行的 py 文件为 client.py ，按照 $m, p, n$输入文件 输出文件形式的命令行格式进行输入，那么我们可以传入以下指令：
+假如我们需要运行的 py 文件为 client.py ，按照 $m, p, n$、输入文件、输出文件的形式传入命令行参数，那么可以参考以下指令：
 ```sh
-1 python3 client.py 4 3 2 input.txt output.txt
+python3 client.py 4 3 2 input.txt output.txt
 ```
 这只是其中一种可供参考的方案，你也可以自行设置命令行格式，或者将$m, p, n$放在输入文件。
 #### 输入文件样例
@@ -545,7 +532,7 @@ B,2,2,2
 B,3,1,11
 B,3,2,9
 ```
-### 输出格式样例
+#### 输出格式样例
 如上所述，最终的结果矩阵是对所有非零元素先按行再按列进行排序后再统一输出，这样可以简化正确性的比较。如果你的代码无法保证输出是按照该顺序进行排列、但是可以保证正确性的话，我们会在满分的基础上扣0.5分。
 ```txt
 1,1,43
@@ -559,7 +546,7 @@ B,3,2,9
 ```
 1. 请在实验报告中详细叙述设计思想、数据分割方案、任务分配和整合方案等细节，并解释关键代码。<u>最终的结果需要和单机的处理结果比对正确性</u>。
 
-##  六、Bonus
+## 六、Bonus
 
 Bonus 最高 3 分，可按下面两项累计获得。
 
