@@ -47,14 +47,14 @@
 
   - 课程共有两个服务器集群，可由本地ssh连接（需连接网络tsinghua或使用VPN），登录thumm01后，使用命令`ssh thumm0x`可以跳转至其他主机。服务器资源有限，请勿用于课程无关任务。
 
-  - 集群一：ip地址： 10.103.9.11 ，可用机器：01，02，03，04。登录集群一01的命令： ssh [xxx@10.103.9.11](mailto:xxx@10.103.9.11) （也就是和以下实验指导书的内容完全相同）
+  - 集群一：ip地址： 10.103.9.11 ，可用机器：01-04。登录集群一01的命令： ssh [xxx@10.103.9.11](mailto:xxx@10.103.9.11) （也就是和以下实验指导书的内容完全相同）
 
   - 集群二：ip地址： 10.103.10.156 ，可用机器：01-04。 登录集群二01的命令： ssh [xxx@10.103.10.156](mailto:xxx@10.103.10.156) -p 8001 (由于进入该集群的端口并非默认端口，所以在 ssh 指令后面一定要用 -p 要加上端口号！) 
 
 
 * 本地SSH客户端的选择
   
-  - 本课程使用Secure Shell(SSH)协议连接远程服务器。MacOS, Linux用户可以使用Terminal, Windows用户可以下载[MobaXterm](https://mobaxterm.mobatek.net/)、[XShell](https://www.netsarang.com/en/free-for-home-school/)等软件。考虑到后续实验，我们推荐在[VSCode](https://code.visualstudio.com/docs/remote/ssh)、[PyCharm](https://www.jetbrains.com/help/pycharm/remote-development-starting-page.html)等IDE中部署远程连接，方便代码编写与调试。
+  - 本课程使用Secure Shell(SSH)协议连接远程服务器。可以使用Terminal等软件进行连接。考虑到后续实验，我们推荐在[VSCode](https://code.visualstudio.com/docs/remote/ssh)、[Cursor](https://cursor.com/for/data-science#remote-development-with-ssh)等IDE中部署远程连接，方便代码编写与调试。
 
 * 报告提交要求
 
