@@ -3,6 +3,10 @@
     <img src="./assets/bigger4.png" alt="1" style="zoom:50%;" />
 </div>
 
+## 仓库说明
+
+本实验所用仓库是 https://github.com/AnikiFan/BigData-SIGS.git 。请 clone 整个仓库，并在其中完成本实验。每次实验开始前请先在仓库目录执行 `git pull` 同步，以便获得最新的实验指令和本课程所采用的 agent 提示词。
+
 ## 〇、服务器集群说明
 
 ### 1. 可使用的服务器集群

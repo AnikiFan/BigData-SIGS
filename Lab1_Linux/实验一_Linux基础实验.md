@@ -2,6 +2,10 @@
 
 <img src="./assets/sudo.png" alt="sudo" style="zoom:60%;" />
 
+## 仓库说明
+
+本实验所用仓库是 https://github.com/AnikiFan/BigData-SIGS.git 。请 clone 整个仓库，并在其中完成本实验。每次实验开始前请先在仓库目录执行 `git pull` 同步，以便获得最新的实验指令和本课程所采用的 agent 提示词。
+
 ## 一、实验目标
 
 * 实验主体满分 **5 分**，外加 **2 分 Bonus**。本实验旨在为后续 MapReduce / Spark 实验打下基础，包括以下 4 项核心能力：

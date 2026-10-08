@@ -1,5 +1,9 @@
 # 实验四 Spark Streaming
 
+## 仓库说明
+
+本实验所用仓库是 https://github.com/AnikiFan/BigData-SIGS.git 。请 clone 整个仓库，并在其中完成本实验。每次实验开始前请先在仓库目录执行 `git pull` 同步，以便获得最新的实验指令和本课程所采用的 agent 提示词。
+
 # 0. 注意事项
 
 本次实验中请大家使用完成 spark-shell 之后及时使用 `:quit` 命令退出～
