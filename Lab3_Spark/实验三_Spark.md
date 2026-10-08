@@ -8,6 +8,8 @@
 
 ## 0. 提醒事项
 
+按学号尾号分配集群：单号用集群一，双号用集群二。登录方式见实验一。每位同学只使用分配到的那一个集群。
+
 本次实验过程中，请大家完成任务后，一定记得及时使用`:quit` 命令退出 spark-shell。  
 
 服务器资源不足时会导致其他同学任务失败：例如出现`WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources` 的报错提醒（此种情况需群里艾特助教清理僵尸进程或者重启 spark）
