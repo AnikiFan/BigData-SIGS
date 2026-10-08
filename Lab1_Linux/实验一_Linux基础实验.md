@@ -47,7 +47,7 @@
 
   - 课程共有两个服务器集群，可由本地ssh连接（需连接网络tsinghua或使用VPN），登录thumm01后，使用命令`ssh thumm0x`可以跳转至其他主机。服务器资源有限，请勿用于课程无关任务。
 
-  - 集群一：ip地址： 10.103.9.11 ，可用机器：01-04。登录集群一01的命令： ssh [xxx@10.103.9.11](mailto:xxx@10.103.9.11) （也就是和以下实验指导书的内容完全相同）
+  - 集群一：ip地址： 10.103.9.11 ，可用机器：01、02、04、05（03 不可用）。登录集群一01的命令： ssh [xxx@10.103.9.11](mailto:xxx@10.103.9.11) （也就是和以下实验指导书的内容完全相同）
 
   - 集群二：ip地址： 10.103.10.156 ，可用机器：01-04。 登录集群二01的命令： ssh [xxx@10.103.10.156](mailto:xxx@10.103.10.156) -p 8001 (由于进入该集群的端口并非默认端口，所以在 ssh 指令后面一定要用 -p 要加上端口号！) 
 
@@ -610,7 +610,7 @@ sys     0m0.0xxs
 set -e                                # 出错即退出，便于发现问题
 
 NAME="thumm"                          # 变量赋值，等号两侧不能有空格
-NODES=(01 02 03 04)                   # 数组
+NODES=(01 02 04 05)                   # 数组（集群一可用节点）
 
 greet() {                             # 函数定义
     local who=$1                      # 函数第 1 个参数
@@ -634,7 +634,7 @@ echo "exit code = $?"                 # $? 是上一条命令的退出码
 
 #### 6.2 任务要求：编写 `start_all.sh` 与 `stop_all.sh` （1.5 分）
 
-请编写两个 shell 脚本，分别在 4 个节点（如集群一的 thumm01、02、03、04）上同时启动/停止一个示例进程（推荐用 `sleep 600` 模拟）：
+请编写两个 shell 脚本，分别在 4 个节点（集群一为 thumm01、02、04、05）上同时启动/停止一个示例进程（推荐用 `sleep 600` 模拟）：
 
 `start_all.sh` 至少需要做到：
 
@@ -694,7 +694,7 @@ For each node:
 For each node:
     Copy authorized_keys and the key files to the node's ~/.ssh/ directory
 
-# 这个脚本做的思路是在thumm01上生成4个节点的公钥和私钥，然后把所有公钥加入到authorized_keys中，然后把各自的公钥私钥以及authorized_keys分发到各个节点。之后就可以通过ssh thumm0**X**从thumm01免密登录到**X**号节点了。
+# 这个脚本做的思路是在thumm01上生成4个节点的公钥和私钥，然后把所有公钥加入到authorized_keys中，然后把各自的公钥私钥以及authorized_keys分发到各个节点。集群一的4个节点是 thumm01、thumm02、thumm04、thumm05。之后就可以通过 ssh 从 thumm01 免密登录到这些节点了。
 
 
  ```
@@ -718,7 +718,7 @@ For each node:
     ```
 2. **Distribute（分发到各节点）**：
     ```shell
-    NODES=(thumm01 thumm02 thumm03 thumm04)
+    NODES=(thumm01 thumm02 thumm04 thumm05)
     PARTS=(part_aa part_ab part_ac part_ad)
     for i in 0 1 2 3; do
         scp ${PARTS[$i]} ${NODES[$i]}:/tmp/
