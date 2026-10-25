@@ -427,7 +427,7 @@ blk_no,host_name,blk_size
 
 ### 7. HeartBeat 与自动补副本（2 分）
 
-GFS 中 Master 会周期性和 ChunkServer 通信，判断节点是否仍然存活。本实验将 HeartBeat 从 Bonus 调整为正文任务，请修改`name_node.py`和`data_node.py`，实现以下功能：
+GFS 中 Master 会周期性和 ChunkServer 通信，判断节点是否仍然存活。请修改`name_node.py`和`data_node.py`，实现以下功能：
 
 1. NameNode 周期性向 `HOST_LIST` 中的DataNode发送心跳请求，或由DataNode周期性向NameNode汇报存活状态；
 2. 如果某个DataNode超过`HEARTBEAT_TIMEOUT`没有响应，NameNode应判定该节点失联，并在日志中输出死亡节点；
