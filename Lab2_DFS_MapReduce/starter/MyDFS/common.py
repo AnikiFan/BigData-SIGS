@@ -5,10 +5,10 @@ DFS_BLK_SIZE = 4096  # 数据块大小
 NAME_NODE_DIR = "./dfs/name/"
 DATA_NODE_DIR = "./dfs/data/"
 
+# 建议使用学号后四位作为端口号，避免端口冲突
 NAME_NODE_PORT = 21009  # NameNode监听端口
 DATA_NODE_PORT = 11009  # DataNode程序监听端口
 
-# 建议使用学号后四位作为端口号，避免端口冲突
 HEARTBEAT_INTERVAL = 2  # NameNode/DataNode心跳间隔，单位：秒
 HEARTBEAT_TIMEOUT = 6   # 超过该时间未收到心跳则判定DataNode失联
 
