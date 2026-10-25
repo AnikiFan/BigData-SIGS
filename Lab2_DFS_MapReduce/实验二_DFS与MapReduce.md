@@ -359,6 +359,7 @@ def ls(self, dfs_path):
 
 ```sh
 $ python3 client.py -ls test_copyFromLocal.txt
+Request: ls test_copyFromLocal.txt
 b'blk_no,host_name,blk_size\n0,localhost,4096\n1,localhost,4096\n2,localhost,219\n'
 ```
 
