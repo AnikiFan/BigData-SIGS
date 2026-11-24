@@ -152,7 +152,7 @@ scala > result.saveAsTextFile("/dsjxtjc/2020214210/wc_output")
 * 使用`sortBy`按词频排序；
 * 使用`take(10)`取出Top-10结果。
 
-请在报告中给出关键代码和Top-10输出截图，并简要说明`take(10)`为什么会触发Spark任务执行。
+请在报告中给出关键代码和Top-10输出截图，并简要说明：在调用 `take(10)` 之前，为什么 Spark 不会开始计算？为什么调用 `take(10)` 之后，Spark 才真正开始执行计算？
 
 #### 3. 分区与并行度对比（1分）
 
